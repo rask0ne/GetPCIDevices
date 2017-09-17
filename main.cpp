@@ -1,10 +1,14 @@
 #include <QApplication>
 #include <QProcess>
 #include <iostream>
+#include <QRegExp>
+#include <QTextStream>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+    QRegExp rx("\" \"");
 
     QProcess myProcess;
     QString program = "lspci -mmnn";
@@ -12,9 +16,16 @@ int main(int argc, char *argv[])
     myProcess.waitForFinished();
 
     QByteArray result = myProcess.readAllStandardOutput ();
-    const QString all(result);
+    QTextStream all(result);
 
-    std::cout << all.toStdString() << std::endl;
+    while(!all.atEnd()){
+        QString str = all.readLine();
+        QStringList list = str.split(rx, QString::SkipEmptyParts);
+        std::cout << "VendorID: ";
+        std::cout << list[1].toStdString() ;
+        std::cout << "\t DeviceID: ";
+        std::cout << list[2].split(rx, QString::SkipEmptyParts)[0].toStdString() << std::endl;
+    }
 
     return a.exec();
 }
