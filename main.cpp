@@ -8,8 +8,8 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    QRegExp rx("\" \"");
-
+    QRegExp rxFirst("\"");
+    QRegExp rxSecond("\" \"");
     QProcess myProcess;
     QString program = "lspci -mmnn";
     myProcess.start(program);
@@ -20,11 +20,11 @@ int main(int argc, char *argv[])
 
     while(!all.atEnd()){
         QString str = all.readLine();
-        QStringList list = str.split(rx, QString::SkipEmptyParts);
+        QStringList list = str.split(rxSecond, QString::SkipEmptyParts);
         std::cout << "VendorID: ";
         std::cout << list[1].toStdString() ;
         std::cout << "\t DeviceID: ";
-        std::cout << list[2].split(rx, QString::SkipEmptyParts)[0].toStdString() << std::endl;
+        std::cout << list[2].split(rxFirst, QString::SkipEmptyParts)[0].toStdString() << std::endl;
     }
 
     return a.exec();
