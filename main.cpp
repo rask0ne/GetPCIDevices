@@ -8,14 +8,15 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    QRegExp rxFirst("\"");
-    QRegExp rxSecond("\" \"");
+    const QRegExp rxFirst("\"");
+    const QRegExp rxSecond("\" \"");
+
     QProcess myProcess;
     QString program = "lspci -mmnn";
     myProcess.start(program);
     myProcess.waitForFinished();
 
-    QByteArray result = myProcess.readAllStandardOutput ();
+    QByteArray result = myProcess.readAllStandardOutput();
     QTextStream all(result);
 
     while(!all.atEnd()){
